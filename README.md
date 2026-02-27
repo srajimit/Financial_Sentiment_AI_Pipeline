@@ -4,50 +4,80 @@ An end-to-end MLOps pipeline that classifies financial news into Positive, Negat
 
 **1.	Overview**
 This repository contains a high-performance REST API designed to process financial text. Unlike general sentiment models, this pipeline is optimized for financial terminology (e.g., "bearish," "surged," "guidance").
+
 **2.	Dataset & Model Details**
 The underlying model is a DistilBERT-base-uncased transformer, fine-tuned on financial text to capture industry-specific nuances.
+
 **Training Data (Financial PhraseBank)**
+
 **Total Instances:** 4,840 labeled sentences.
+
 **Content:** Sentences from financial news articles (e.g., earnings reports, mergers, market trends).
-**Labels: **
+
+**Labels:**
 **Positive:** Indicating growth, exceeding expectations, or market gains.
 **Neutral:** Factual statements or scheduled corporate events.
 **Negative:** Indicating losses, lawsuits, or economic downturns.
+
 **Class Distribution:** The dataset contains a realistic mix, with a high volume of neutral statements to reflect real-world financial reporting.
+
 **3.	Model Selection : Why DistilBert ?**
 For this pipeline, DistilBERT was chosen over the standard BERT model for several production-related reasons:
+
 **Latency:** DistilBERT is 60% faster than BERT-base, ensuring our /predict endpoint remains responsive under load.
+
 **Resource Efficiency:** It has 40% fewer parameters and a smaller memory footprint, significantly reducing Docker image size and cloud hosting costs.
+
 **Performance Retention:** It retains roughly 97% of BERT's language understanding capabilities, making it the "sweet spot" for financial sentiment tasks where millisecond speed matters.
+
 **4.	Key Features**
+
 **Core Model:** Fine-tuned DistilBERT (Transformer) specialized for financial sentiment.
+
 **Backend:** Built with FastAPI for high-speed, asynchronous inference.
+
 **Containerization:** Fully Dockerized to ensure environment consistency across any machine.
+
 **Observability:** Integrated logging to track prediction history, confidence scores, and latency.
 
 **5.	Architecture**
+
 The pipeline follows a modular microservice pattern:
+
 **Client Interface:** Uses FastAPI’s interactive Swagger UI for real-time testing.
+
 **API Layer:** An asynchronous FastAPI web server handling request validation via Pydantic
+
 **Inference Engine:** A fine-tuned DistilBERT transformer that processes text inputs on the CPU
+
 **Logging System:** A multi-handler logger that captures metadata (sentiment, confidence, latency) into api_usage.log
+
 **Response:** returned with sentiment and confidence
+
 **Deployment:** The entire stack is encapsulated in a Docker container for environment parity. 
 
 **6.	Technology Stack**
+
 **Language:** Python 3.11
+
 **AI/ML:** HuggingFace Transformers, PyTorch
+
 **API Framework:** FastAPI, Uvicorn, Pydantic
+
 **Infrastructure:** Docker
+
 **Monitoring:** Python Logging Library (File & Stream handlers)
 
 **7.	Getting Started**
+
 **Prerequisites**
 •	Docker Desktop installed
 •	Git installed
+
 **A . Build the Image**
 Navigate to the project root and build the Docker container:
 docker build -t financial-ai-api .
+
 **B. Run the Service**
 Run the container and map the port. Volume is used to persist logs from the container to the local machine:
 docker run -p 8000:8000 -v "${PWD}:/app" financial-ai-api
