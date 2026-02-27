@@ -1,5 +1,7 @@
 **Financial News Sentiment Analysis Pipeline**
+
 An end-to-end MLOps pipeline that classifies financial news into Positive, Negative, or Neutral sentiments. This project demonstrates the transition from a research model (Fine-tuned DistilBERT) to a production-ready API.
+
 **1.	Overview**
 This repository contains a high-performance REST API designed to process financial text. Unlike general sentiment models, this pipeline is optimized for financial terminology (e.g., "bearish," "surged," "guidance").
 **2.	Dataset & Model Details**
